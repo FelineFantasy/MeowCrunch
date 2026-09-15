@@ -2,7 +2,6 @@ import random
 import sys
 
 def main():
-    name = "Лао Чжан"
     satiety = 50
     happiness = 50
     energy = 70
@@ -12,6 +11,12 @@ def main():
     day = 1
     day_phase = "день"
     dirty_tray = False
+    season = "весна"
+    harvest_collected = False
+    toys = 0
+    dreamis = 0
+    catnip = 0
+    tianshan_mint = 0
 
     phases = {
         "утро": "день",
@@ -36,18 +41,28 @@ def main():
         quality = max(0, min(quality, 100))
         money = max(0, money)
 
+        if day <= 30:
+            season = "весна"
+        elif day <= 60:
+            season = "лето"
+        elif day <= 90:
+            season = "осень"
+        else:
+            season = "зима"
+
         print("\n" + "=" * 50)
-        print(f"День: {day} ({day_phase})")
+        print(f"День: {day} ({day_phase}) | Сезон: {season}")
         print(f"Монеты: {money}")
         print(f"Сытость: {satiety} | Счастье: {happiness}")
         print(f"Энергия: {energy} | Здоровье: {health}")
         print(f"Качество хрустяшек: {quality}")
+        print(f"Игрушки: {toys} | Дримис: {dreamis} | Кошачья мята: {catnip} | Тяньшаньская мята: {tianshan_mint}")
         if dirty_tray:
             print("Внимание: Лоток грязный!")
         print("=" * 50)
 
         if random.random() < 0.15:
-            event = random.randint(1, 5)
+            event = random.randint(1, 9)
             print("\n--- СЛУЧАЙНОЕ СОБЫТИЕ ---")
             if event == 1:
                 print("Кот мяукнул от умиления.")
@@ -64,11 +79,43 @@ def main():
             elif event == 5:
                 print("Пришел хитрец Фандахуй и украл часть припасов!")
                 money -= random.randint(5, 15)
+            elif event == 6:
+                gift = random.randint(5, 15)
+                money += gift
+                print(f"Кот принес подарок: +{gift} монет.")
+            elif event == 7:
+                print("Кот разбил вазу. Счастье и любовь снижаются.")
+                happiness -= 10
+            elif event == 8:
+                print("Кот застрял в трубе. Энергия и здоровье падают.")
+                energy -= 10
+                health -= 10
+            elif event == 9:
+                print("Кот объелся мяты. Здоровье падает, но счастье растет.")
+                health -= 10
+                happiness += 15
             print("-------------------------\n")
 
         if dirty_tray:
             happiness -= 2
             health -= 1
+
+        if season == "весна":
+            if random.random() < 0.1:
+                happiness += 5
+                print("Весна: коты радуются и размножаются. Счастье растет.")
+        elif season == "лето":
+            if random.random() < 0.1:
+                quality += 5
+                print("Лето: хрустяшки растут быстрее. Качество улучшается.")
+        elif season == "осень":
+            if random.random() < 0.1:
+                money += 10
+                print("Осень: урожай созревает. Вы получаете немного монет.")
+        elif season == "зима":
+            if random.random() < 0.1:
+                energy -= 5
+                print("Зима: коты мерзнут и тратят энергию.")
 
         print("0. Выйти из игры")
         print("1. Покормить котов (-5 монет, +10 сытости)")
@@ -81,6 +128,10 @@ def main():
         print("8. Отправить котов работать на ферме (-10 энергии, +15 монет, -5 счастья)")
         print("9. Сходить к ветеринару (-30 монет, +30 здоровья)")
         print("10. Уложить спать (Смена фазы дня, +25 энергии)")
+        print("11. Купить игрушку (-15 монет, +10 счастья)")
+        print("12. Купить Дримис (-25 монет, +15 сытости, +10 счастья)")
+        print("13. Купить кошачью мяту (-10 монет, +20 счастья, -10 здоровья)")
+        print("14. Собрать урожай (если качество >= 80)")
 
         choice = input("Выберите действие: ").strip()
 
@@ -127,6 +178,7 @@ def main():
                 money -= 20
                 quality += 15
                 health -= 5
+                tianshan_mint += 1
                 print("Вы купили Тяньшаньскую мяту. Качество растет, но здоровье падает.")
             else:
                 print("Недостаточно монет.")
@@ -160,7 +212,52 @@ def main():
             if day_phase == "утро":
                 day += 1
                 quality += int((satiety + happiness + health) / 30)
+                if day == 31:
+                    season = "лето"
+                    print("Наступило лето.")
+                elif day == 61:
+                    season = "осень"
+                    print("Наступила осень.")
+                elif day == 91:
+                    season = "зима"
+                    print("Наступила зима.")
             print("Наступила следующая фаза дня.")
+        elif choice == "11":
+            if money >= 15:
+                money -= 15
+                happiness += 10
+                toys += 1
+                print("Вы купили игрушку. Коты довольны.")
+            else:
+                print("Недостаточно монет.")
+        elif choice == "12":
+            if money >= 25:
+                money -= 25
+                satiety += 15
+                happiness += 10
+                dreamis += 1
+                print("Вы купили Дримис. Коты сыты и счастливы.")
+            else:
+                print("Недостаточно монет.")
+        elif choice == "13":
+            if money >= 10:
+                money -= 10
+                happiness += 20
+                health -= 10
+                catnip += 1
+                print("Вы купили кошачью мяту. Счастье растет, здоровье падает.")
+            else:
+                print("Недостаточно монет.")
+        elif choice == "14":
+            if quality >= 80 and not harvest_collected:
+                harvest_collected = True
+                bonus = quality * 5
+                money += bonus
+                print(f"Вы собрали урожай! Качество: {quality}. Бонус: +{bonus} монет.")
+            elif harvest_collected:
+                print("Урожай уже собран.")
+            else:
+                print("Качество хрустяшек слишком низкое для сбора урожая.")
         else:
             print("Неверный ввод.")
 
