@@ -1,6 +1,6 @@
 # MeowCrunch Game 🐱
 
-[![Python Version](https://shields.io)](https://python.org)
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 A text-based farm simulator written in Python. Play as Lao Zhang, manage a unique plantation of "MeowCrunch" cats, grow valuable golden crusts, and protect your harvest!
