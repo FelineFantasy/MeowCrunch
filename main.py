@@ -26,7 +26,10 @@ def main():
     }
 
     print("МЯУХРУСТ: ФЕРМА ЗОЛОТИСТЫХ ХРУСТЯШЕК")
-    print("Добро пожаловать на ферму, Лао Чжан!")
+    print("Добро пожаловать на ферму!")
+    player_name = input("Введите ваше имя (Enter — Лао Чжан): ").strip()
+    name = player_name if player_name else "Лао Чжан"
+    print(f"Добро пожаловать на ферму, {name}!")
     input("Нажмите Enter, чтобы начать...")
 
     while day <= 90:
