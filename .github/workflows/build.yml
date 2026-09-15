@@ -1,0 +1,176 @@
+name: 🐱 MeowCrunch CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'main.py'
+      - '.github/workflows/*.yml'
+    tags:
+      - 'v[0-9]*'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'main.py'
+
+jobs:
+  syntax-check:
+    name: Syntax check (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Скачиваем код
+        uses: actions/checkout@v4
+
+      - name: Устанавливаем Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Проверяем, что Python-файл валидный
+        shell: bash
+        run: |
+          python -m py_compile main.py && echo "OK: синтаксис корректен"
+
+  build-exe:
+    name: Build (${{ matrix.os }})
+    needs: syntax-check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: MeowCrunch_Linux
+            ext: ""
+          - os: windows-latest
+            artifact: MeowCrunch_Windows
+            ext: ".exe"
+          - os: macos-latest
+            artifact: MeowCrunch_macOS
+            ext: ""
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Скачиваем код
+        uses: actions/checkout@v4
+
+      - name: Устанавливаем Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      # ---------- Linux ----------
+      - name: Устанавливаем зависимости (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y patchelf ccache
+          pip install --upgrade pip
+          pip install nuitka
+
+      - name: Собираем бинарник (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          python -m nuitka \
+            --standalone \
+            --onefile \
+            --assume-yes-for-downloads \
+            --output-dir=dist \
+            --output-filename=MeowCrunch_Linux \
+            main.py
+
+      # ---------- macOS ----------
+      - name: Устанавливаем зависимости (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          pip install --upgrade pip
+          pip install nuitka
+
+      - name: Собираем бинарник (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          python -m nuitka \
+            --standalone \
+            --onefile \
+            --assume-yes-for-downloads \
+            --output-dir=dist \
+            --output-filename=MeowCrunch_macOS \
+            main.py
+
+      # ---------- Windows ----------
+      - name: Устанавливаем PyInstaller (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Собираем бинарник (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          pyinstaller --onefile --name "MeowCrunch_Windows" main.py
+          mkdir -p dist
+          cp "dist/MeowCrunch_Windows.exe" "dist/" 2>/dev/null || true
+          ls -la dist
+
+      - name: Загружаем артефакт сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}
+          path: dist/MeowCrunch_*${{ matrix.ext }}
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-release:
+    name: Publish release
+    needs: build-exe
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.event_name == 'push'
+    steps:
+      - name: Скачиваем код
+        uses: actions/checkout@v4
+
+      - name: Скачиваем все собранные бинарники
+        uses: actions/download-artifact@v4
+        with:
+          pattern: binary-*
+          path: release_assets
+          merge-multiple: true
+
+      - name: Смотрим, что скачали
+        run: ls -la release_assets
+
+      - name: Обновляем тег main
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -d main 2>/dev/null || true
+          git push origin :refs/tags/main 2>/dev/null || true
+          sleep 3
+          git tag main
+          git push origin refs/tags/main --force
+
+      - name: Публикуем релиз
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: main
+          name: "MeowCrunch — latest build"
+          body: |
+            🐱 **MeowCrunch** — свежие автоматические сборки.
+
+            Собрано из коммита `${{ github.sha }}`.
+            Тег `main` пересоздаётся при каждом пуше в ветку `main`.
+
+            **Что внутри:**
+            - `MeowCrunch_Linux` — для Linux
+            - `MeowCrunch_Windows.exe` — для Windows
+            - `MeowCrunch_macOS` — для macOS
+          files: release_assets/*
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
