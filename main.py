@@ -14,7 +14,6 @@ def main():
     season = "весна"
     harvest_collected = False
     toys = 0
-    dreamis = 0
     catnip = 0
     tianshan_mint = 0
 
@@ -59,7 +58,7 @@ def main():
         print(f"Сытость: {satiety} | Счастье: {happiness}")
         print(f"Энергия: {energy} | Здоровье: {health}")
         print(f"Качество хрустяшек: {quality}")
-        print(f"Игрушки: {toys} | Дримис: {dreamis} | Кошачья мята: {catnip} | Тяньшаньская мята: {tianshan_mint}")
+        print(f"Игрушки: {toys} | Кошачья мята: {catnip} | Тяньшаньская мята: {tianshan_mint}")
         if dirty_tray:
             print("Внимание: Лоток грязный!")
         print("=" * 50)
@@ -132,9 +131,8 @@ def main():
         print("9. Сходить к ветеринару (-30 монет, +30 здоровья)")
         print("10. Уложить спать (Смена фазы дня, +25 энергии)")
         print("11. Купить игрушку (-15 монет, +10 счастья)")
-        print("12. Купить Дримис (-25 монет, +15 сытости, +10 счастья)")
-        print("13. Купить кошачью мяту (-10 монет, +20 счастья, -10 здоровья)")
-        print("14. Собрать урожай (если качество >= 80)")
+        print("12. Купить кошачью мяту (-10 монет, +20 счастья, -10 здоровья)")
+        print("13. Собрать урожай (если качество >= 80)")
 
         choice = input("Выберите действие: ").strip()
 
@@ -234,15 +232,6 @@ def main():
             else:
                 print("Недостаточно монет.")
         elif choice == "12":
-            if money >= 25:
-                money -= 25
-                satiety += 15
-                happiness += 10
-                dreamis += 1
-                print("Вы купили Дримис. Коты сыты и счастливы.")
-            else:
-                print("Недостаточно монет.")
-        elif choice == "13":
             if money >= 10:
                 money -= 10
                 happiness += 20
@@ -251,7 +240,7 @@ def main():
                 print("Вы купили кошачью мяту. Счастье растет, здоровье падает.")
             else:
                 print("Недостаточно монет.")
-        elif choice == "14":
+        elif choice == "13":
             if quality >= 80 and not harvest_collected:
                 harvest_collected = True
                 bonus = quality * 5
@@ -271,7 +260,7 @@ def main():
         print("90 ДНЕЙ ПРОШЛО! СБОР УРОЖАЯ")
         print("=" * 50)
         print(f"Итоговое качество хрустяшек: {quality}")
-        
+
         if quality >= 80:
             final_money = money + 500
             print(f"Превосходный результат! Вы собрали идеальные золотистые хрустяшки.")
