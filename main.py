@@ -30,7 +30,7 @@ def main():
     }
 
     clear_screen()
-    print("МЯУХРУСТ: ФЕРМА ЗОЛОТИСТЫХ ХРУСТЯШЕК")
+    print("МЯУХРУСТ: ФЕРМА ЗОЛОТИСТЫХ МЯУХРУСТОВ")
     print("Добро пожаловать на ферму!")
     player_name = input("Введите ваше имя (Enter — Лао Чжан): ").strip()
     name = player_name if player_name else "Лао Чжан"
