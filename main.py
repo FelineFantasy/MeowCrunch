@@ -1,5 +1,10 @@
 import random
 import sys
+import os
+
+def clear_screen():
+    """Очистка экрана (кроссплатформенно)."""
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def main():
     satiety = 50
@@ -24,6 +29,7 @@ def main():
         "ночь": "утро"
     }
 
+    clear_screen()
     print("МЯУХРУСТ: ФЕРМА ЗОЛОТИСТЫХ ХРУСТЯШЕК")
     print("Добро пожаловать на ферму!")
     player_name = input("Введите ваше имя (Enter — Лао Чжан): ").strip()
@@ -32,6 +38,8 @@ def main():
     input("Нажмите Enter, чтобы начать...")
 
     while day <= 90:
+        clear_screen()
+
         if satiety <= 0 or happiness <= 0 or health <= 0:
             print("\nВаши коты Мяухрусты погибли или сбежали. Игра окончена.")
             sys.exit()
@@ -256,6 +264,7 @@ def main():
         input("Нажмите Enter, чтобы продолжить...")
 
     if day > 90:
+        clear_screen()
         print("\n" + "=" * 50)
         print("90 ДНЕЙ ПРОШЛО! СБОР УРОЖАЯ")
         print("=" * 50)
