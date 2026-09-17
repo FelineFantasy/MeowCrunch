@@ -2,8 +2,13 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Website](https://img.shields.io/badge/website-online-brightgreen.svg)](https://felinefantasy.github.io/MeowCrunch/)
 
 A text-based farm simulator written in Python. Play as Lao Zhang, manage a unique plantation of "MeowCrunch" cats, grow valuable golden crusts, and protect your harvest!
+
+## 🌐 Website
+
+The game has a website: **[felinefantasy.github.io/MeowCrunch](https://felinefantasy.github.io/MeowCrunch/)**
 
 ## 📝 Description
 
