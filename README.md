@@ -33,7 +33,7 @@ Random encounters happen every day. Watch out for **loud noises** that scare the
 
 ### Run from source (Requires Python 3.8+)
 ```bash
-git clone https://github.com
+git clone https://github.com/FelineFantasy/MeowCrunch
 cd MeowCrunch
 python main.py
 ```
