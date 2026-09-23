@@ -51,14 +51,18 @@ Main menu actions (options 0-10):
 ## 📁 Project Files
 
 ```text
-.github/
-└── workflows/
-    └── FUNDING.yml
-LICENSE
-README.md
-index.html
-main.py
-style.css
+MeowCrunch/
+├── .github/
+│   └── workflows/
+│       └── FUNDING.yml
+├── assets/
+│   └── icon.png
+├── .gitignore
+├── LICENSE
+├── README.md
+├── index.html
+├── main.py
+└── style.css
 ```
 
 ## 💖 Support the Project
