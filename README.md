@@ -51,13 +51,14 @@ Main menu actions (options 0-10):
 ## 📁 Project Files
 
 ```text
-MeowCrunch/
-├── assets/
-│   └── icon.png       # Game graphics/icons
-├── .gitignore
-├── meow_crunch.py     # Main game executable file
-├── LICENSE            # MIT License
-└── README.md          # Project documentation
+.github/
+└── workflows/
+    └── FUNDING.yml
+LICENSE
+README.md
+index.html
+main.py
+style.css
 ```
 
 ## 💖 Support the Project
