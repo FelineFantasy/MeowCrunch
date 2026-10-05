@@ -55,8 +55,6 @@ MeowCrunch/
 ├── .github/
 │   └── workflows/
 │       └── FUNDING.yml
-├── assets/
-│   └── icon.png
 ├── .gitignore
 ├── LICENSE
 ├── README.md
