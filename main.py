@@ -76,9 +76,12 @@ def main():
             print("\n--- СЛУЧАЙНОЕ СОБЫТИЕ ---")
             if event == 1:
                 print("Кот мяукнул от умиления.")
-            elif event == 2 and not dirty_tray:
-                dirty_tray = True
-                print("Кот сходил в лоток. Стало грязно.")
+            elif event == 2:
+                if not dirty_tray:
+                    dirty_tray = True
+                    print("Кот сходил в лоток. Стало грязно.")
+                else:
+                    print("Кот обнюхал и без того грязный лоток и обиженно мяукнул.")
             elif event == 3:
                 found = random.randint(1, 5)
                 money += found
